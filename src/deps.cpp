@@ -1,8 +1,71 @@
 #include <Geode/Geode.hpp>
 using namespace geode::prelude;
 
-#include <alphalaneous.alphas_geode_utils/include/Utils.h>
-namespace geode::сocos { using namespace AlphaUtils::Cocos; }
+namespace geode::cocos {
+	static inline std::string getClassName(cocos2d::CCObject* obj, bool removeNamespace = false) {
+		if (!obj) return "nullptr";
+
+		std::string ret;
+
+#ifdef GEODE_IS_WINDOWS
+		ret = typeid(*obj).name();
+		constexpr std::string_view classPrefix = "class ";
+		constexpr std::string_view structPrefix = "struct ";
+
+		auto removeAll = [](std::string& str, std::string_view prefix) {
+			size_t pos = 0;
+			while ((pos = str.find(prefix, pos)) != std::string::npos) {
+				str.erase(pos, prefix.size());
+			}
+			};
+
+		removeAll(ret, classPrefix);
+		removeAll(ret, structPrefix);
+#else 
+		int status = 0;
+		auto demangled = abi::__cxa_demangle(typeid(*obj).name(), nullptr, nullptr, &status);
+		if (status == 0 && demangled) {
+			ret = demangled;
+		}
+		free(demangled);
+#endif
+		if (removeNamespace) {
+			if (auto pos = ret.rfind("::"); pos != std::string::npos) {
+				ret = ret.substr(pos + 2);
+			}
+		}
+
+		return ret;
+	}
+}
+
+#include <Geode/modify/CCString.hpp>
+class $modify(CCStringNilCallFix, CCString) {
+	const char* getCString() {
+		//log::debug("{}(int:{})->{}", this, (int)this, __func__);
+		if (!this) log::error("{}->{}", this, __func__);
+		return this ? CCString::getCString() : CCString::createWithFormat("")->getCString();
+	}
+};
+#include <Geode/modify/CCObject.hpp>
+class $modify(CCObjectCallFix, CCObject) {
+	void release(void) {
+		if (!this) log::error("{}->{}", this, __func__);
+		return this ? CCObject::release() : void();
+	};
+	void retain(void) {
+		if (!this) log::error("{}->{}", this, __func__);
+		return this ? CCObject::retain() : void();
+	};
+	CCObject* autorelease(void) {
+		if (!this) log::error("{}->{}", this, __func__);
+		return this ? CCObject::autorelease() : new CCObject();
+	};
+	CCObject* copy(void) {
+		if (!this) log::error("{}->{}", this, __func__);
+		return this ? CCObject::copy() : new CCObject();
+	};
+};
 
 #include <Geode/modify/CCSpriteFrameCache.hpp>
 class $modify(CCSpriteFrameCache) {
@@ -18,15 +81,6 @@ class $modify(CCSpriteFrameCache) {
 			removeSpriteFramesFromFile(plist);
 		}
 		CCSpriteFrameCache::addSpriteFramesWithFile(plist);
-	}
-};
-
-#include <Geode/modify/CCString.hpp>
-class $modify(CCString) {
-	const char* getCString() {
-		//log::debug("{}(int:{})->{}", this, (int)this, __func__);
-		if (!this) log::error("{}->{}", this, __func__);
-		return !this ? CCString::getCString() : CCString::createWithFormat("")->getCString();
 	}
 };
 
@@ -289,7 +343,7 @@ class $modify(CCLayerExt, CCLayer) {
 
 		if (!CCSpriteExt::tryApplyShader(
 			(CCSprite*)"isAvailable"_h,
-			сocos::getClassName(this)
+			cocos::getClassName(this)
 		)) {
 			return;
 		}
@@ -310,7 +364,7 @@ class $modify(CCLayerExt, CCLayer) {
 		sprite->setPosition(contentSize / 2);
 		this->addChild(sprite, INT_MAX, 0);
 
-		CCSpriteExt::tryApplyShader(sprite, сocos::getClassName(this));
+		CCSpriteExt::tryApplyShader(sprite, cocos::getClassName(this));
 
 		this->runAction(CCRepeatForever::create(
 			CCSequence::create(

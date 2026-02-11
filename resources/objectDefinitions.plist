@@ -826,9 +826,9 @@
 			<key>idle00</key>
 			<dict>
 				<key>delay</key>
-				<string>0.08</string>
+				<string>0.38</string>
 				<key>frames</key>
-				<string>17</string>
+				<string>6</string>
 				<key>looped</key>
 				<string>0</string>
 				<key>other</key>
@@ -841,7 +841,7 @@
 			<key>idle01</key>
 			<dict>
 				<key>delay</key>
-				<string>0.08</string>
+				<string>0.008</string>
 				<key>frames</key>
 				<string>17</string>
 				<key>looped</key>
@@ -856,7 +856,7 @@
 			<key>idle02</key>
 			<dict>
 				<key>delay</key>
-				<string>0.08</string>
+				<string>0.008</string>
 				<key>frames</key>
 				<string>17</string>
 				<key>looped</key>
@@ -871,7 +871,7 @@
 			<key>idle03</key>
 			<dict>
 				<key>delay</key>
-				<string>0.10</string>
+				<string>0.010</string>
 				<key>frames</key>
 				<string>30</string>
 				<key>looped</key>
@@ -886,7 +886,7 @@
 			<key>react01</key>
 			<dict>
 				<key>delay</key>
-				<string>0.077</string>
+				<string>0.001</string>
 				<key>frames</key>
 				<string>13</string>
 				<key>looped</key>

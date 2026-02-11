@@ -1,46 +1,17 @@
 #include <Geode/Geode.hpp>
 using namespace geode::prelude;
 
-#include <alphalaneous.alphas_geode_utils/include/Utils.h>
-namespace geode::сocos { using namespace AlphaUtils::Cocos; }
-
 #include <user95401.game-objects-factory/include/main.hpp>
 #include <user95401.game-objects-factory/include/impl.hpp>
 
 #include <libs/httplib.h>
 
 #include <Geode/modify/GJGameLoadingLayer.hpp>
-
-class $modify(MyLoadingLayer, GJGameLoadingLayer) {
-	class FuckYouuu : public GJGameLoadingLayer {
-	public:
-		static FuckYouuu* create(GJGameLevel* level, bool editor) {
-			FuckYouuu* pRet = new FuckYouuu(); 
-			if (pRet && pRet->CCLayer::init()) {
-				pRet->init(level, editor);
-				pRet->autorelease(); return pRet;
-			}
-			else {
-				delete pRet; pRet = 0; return 0;
-			}
-		};
-		void xd() {
-			auto scene = m_editor ? LevelEditorLayer::scene(
-				m_level, false
-			) : PlayLayer::scene(
-				m_level, false, false
-			);
-			auto transition = CCTransitionFade::create(0.4f, scene);
-			CCDirector::sharedDirector()->replaceScene(transition);
-		}
-		virtual void onEnterTransitionDidFinish() override {
-			queueInMainThread([this] { xd(); });
-		}
-	};
-	static GJGameLoadingLayer* transitionToLoadingLayer(GJGameLevel* level, bool editor) {
-		auto layer = FuckYouuu::create(level, editor);
+class $modify(GJGameLoadingLayerFuckYouuu, GJGameLoadingLayer) {
+	static GJGameLoadingLayer* transitionToLoadingLayer(GJGameLevel * level, bool editor) {
+		Ref layer = EditLevelLayer::create(level);
 		switchToScene(layer);
-		return layer;
+		return nullptr;
 	}
 };
 
@@ -297,54 +268,129 @@ inline void SetupObjects() {
 	svcondtrigger->registerMe();
 
 	GameObjectsFactory::createTriggerConfig(UNIQ_ID("plr-tw-upd"), "plr-tw-upd.png")
-		->refID(1935)->triggerObject(
-		[] (EffectGameObject* ob, GJBaseGameLayer* g, int, gd::vector<int> const*){
-			auto id = ob->m_objectID;
-			ob->m_objectID = 1935;
-			auto sVal = string::split(ob->getSaveString(g), ",120,")[1];
-			ob->m_objectID = id;
-			auto a = utils::numFromString<float>(sVal).unwrapOr(1.0f);
-			for (auto p : { g->m_player1, g->m_player2 }) {
-				if (p) p->m_customScaleY = a;
+		->refID(1935)->insertIndex((12 * 5) + 5)->triggerObject(
+			[](EffectGameObject* ob, GJBaseGameLayer* g, int, gd::vector<int> const*) {
+				auto id = ob->m_objectID;
+				ob->m_objectID = 1935;
+				auto sVal = string::split(ob->getSaveString(g), ",120,")[1];
+				ob->m_objectID = id;
+				auto a = utils::numFromString<float>(sVal).unwrapOr(1.0f);
+				for (auto p : { g->m_player1, g->m_player2 }) {
+					if (p) p->m_customScaleY = a;
+				}
 			}
-		}
-	)->saveString(
-		[] (std::string str, GameObject* ob, GJBaseGameLayer* game){
-			auto id = ob->m_objectID;
-			ob->m_objectID = 1935;
-			str = ob->getSaveString(game);
-			ob->m_objectID = id;
-			log::debug("{}", str);
-			str = string::replace(str, "1,1935", fmt::format("1,{}", id)).c_str();
-			//120
-			return str;
-		}
-	)->registerMe();
+		)->saveString(
+			[](std::string str, GameObject* ob, GJBaseGameLayer* game) {
+				auto id = ob->m_objectID;
+				ob->m_objectID = 1935;
+				str = ob->getSaveString(game);
+				ob->m_objectID = id;
+				log::debug("{}", str);
+				str = string::replace(str, "1,1935", fmt::format("1,{}", id)).c_str();
+				//120
+				return str;
+			}
+		)->registerMe();
 
 	GameObjectsFactory::createTriggerConfig(UNIQ_ID("plr-tw-rot"), "plr-tw-rot.png")
-		->refID(1935)->triggerObject(
-		[] (EffectGameObject* ob, GJBaseGameLayer* g, int, gd::vector<int> const*){
-			auto id = ob->m_objectID;
-			ob->m_objectID = 1935;
-			auto sVal = string::split(ob->getSaveString(g), ",120,")[1];
-			ob->m_objectID = id;
-			auto a = utils::numFromString<float>(sVal).unwrapOr(1.0f);
-			for (auto p : { g->m_player1, g->m_player2 }) {
-				if (p) p->m_customScaleX = a;
+		->refID(1935)->insertIndex((12 * 5) + 5)->triggerObject(
+			[](EffectGameObject* ob, GJBaseGameLayer* g, int, gd::vector<int> const*) {
+				auto id = ob->m_objectID;
+				ob->m_objectID = 1935;
+				auto sVal = string::split(ob->getSaveString(g), ",120,")[1];
+				ob->m_objectID = id;
+				auto a = utils::numFromString<float>(sVal).unwrapOr(1.0f);
+				for (auto p : { g->m_player1, g->m_player2 }) {
+					if (p) p->m_customScaleX = a;
+				}
 			}
+		)->saveString(
+			[](std::string str, GameObject* ob, GJBaseGameLayer* game) {
+				auto id = ob->m_objectID;
+				ob->m_objectID = 1935;
+				str = ob->getSaveString(game);
+				ob->m_objectID = id;
+				log::debug("{}", str);
+				str = string::replace(str, "1,1935", fmt::format("1,{}", id)).c_str();
+				//120
+				return str;
+			}
+		)->registerMe();
+
+	GameObjectsFactory::createTriggerConfig(
+		UNIQ_ID("openURL"), "openURL.png",
+		[](EffectGameObject* trigger, GJBaseGameLayer* game, int p1, gd::vector<int> const* p2)
+		{
+			auto xd = MDTextArea::create(fmt::format(
+				"[{0}]({0})", trigger->m_particleString.c_str()
+			), { 122,122 });
+			auto item = findFirstChildRecursive<CCMenuItem>(
+				xd, [](void*) { return true; }
+			);
+			if (item) item->activate();
+		},
+		[](EditTriggersPopup* popup, EffectGameObject* trigger, CCArray* objects)
+		{
+			if (auto title = popup->getChildByType<CCLabelBMFont*>(0)) {
+				title->setString("Open URL");
+				title->setAnchorPoint(CCPointMake(0.5f, 0.3f));
+			}
+			if (auto inf = popup->m_buttonMenu->getChildByType<InfoAlertButton*>(0)) {
+				//inf->setVisible(false);
+				inf->m_description = ""
+					"Links have some special protocols!" "\n"
+					"Use <cg>user:{accountID}</c> to link to a GD account;" "\n"
+					"<cg>level:{id}</c> to link to a GD level and" "\n"
+					"<cg>mod:{id}</c> to link to another Geode mod.";
+			}
+
+			auto input = TextInput::create(312.f, "", "chatFont.fnt");
+			input->setFilter(" !\"#$ % &'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+			input->getInputNode()->m_allowedChars = " !\"#$ % &'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+			input->setString(trigger->m_particleString.c_str());
+			input->setPositionY(55.000f);
+			input->setCallback(
+				[trigger = Ref(trigger)](const std::string& p0) {
+					trigger->m_particleString = p0.c_str();
+				}
+			);
+			input->getBGSprite()->setContentHeight(40.000f);
+			input->getBGSprite()->setAnchorPoint({ 0.5f, 0.550f });
+			popup->m_buttonMenu->addChild(input);
 		}
 	)->saveString(
-		[] (std::string str, GameObject* ob, GJBaseGameLayer* game){
-			auto id = ob->m_objectID;
-			ob->m_objectID = 1935;
-			str = ob->getSaveString(game);
-			ob->m_objectID = id;
-			log::debug("{}", str);
-			str = string::replace(str, "1,1935", fmt::format("1,{}", id)).c_str();
-			//120
+		[](std::string str, GameObject* object, GJBaseGameLayer* level)
+		{
+			str += ",228,";
+			str += ZipUtils::base64URLEncode(object->m_particleString).c_str();
 			return str;
 		}
-	)->registerMe();
+	)->objectFromVector(
+		[](GameObject* object, gd::vector<gd::string>& p0, gd::vector<void*>&, void*, bool)
+		{
+			object->m_particleString = ZipUtils::base64URLDecode(p0[228]).c_str();
+			return object;
+		}
+	)->customSetup([](auto a) { a->m_addToNodeContainer = true; })->registerMe();
+
+	GameObjectsFactory::createTriggerConfig(
+		UNIQ_ID("plr-normal-mode"), "plr-normal-mode.png",
+		[](EffectGameObject* trigger, GJBaseGameLayer* game, int p1, gd::vector<int> const* p2)
+		{
+			if (auto a = game->m_player1) a->m_isPlatformer = false;
+			if (auto a = game->m_player2) a->m_isPlatformer = false;
+		}
+	)->customSetup([](auto a) { a->m_addToNodeContainer = true; })->registerMe();
+
+	GameObjectsFactory::createTriggerConfig(
+		UNIQ_ID("plr-platformer-mode"), "plr-platformer-mode.png",
+		[](EffectGameObject* trigger, GJBaseGameLayer* game, int p1, gd::vector<int> const* p2)
+		{
+			if (auto a = game->m_player1) a->m_isPlatformer = true;
+			if (auto a = game->m_player2) a->m_isPlatformer = true;
+		}
+	)->customSetup([](auto a) { a->m_addToNodeContainer = true; })->registerMe();
+
 }
 
 #include <Geode/modify/EffectGameObject.hpp>
@@ -373,7 +419,7 @@ class $modify(MenuItemGameObject, EffectGameObject) {
 #define MenuItemObjectData(ring) DataNode::at(ring, "menu-item-data")
 	inline static GameObjectsFactory::GameObjectConfig* conf;
 
-	static void setupMenuItemPopup(EditorUI*, EffectGameObject* obj, SetupCollisionStateTriggerPopup * popup) {
+	static void setupMenuItemPopup(EditorUI*, EffectGameObject * obj, SetupCollisionStateTriggerPopup * popup) {
 
 		if (popup->getUserObject("got-custom-setup-for-menu-item")) return;
 		popup->setUserObject("got-custom-setup-for-menu-item", obj);
@@ -399,7 +445,7 @@ class $modify(MenuItemGameObject, EffectGameObject) {
 		activate->setFilter("0123456789");
 		activate->getInputNode()->m_allowedChars = "0123456789";
 		activate->setString(utils::numToString(data->get("activate").asInt().unwrapOr(0)));
-		activate->setPositionY(95.000f);	
+		activate->setPositionY(95.000f);
 		activate->setCallback(
 			[data = Ref(MenuItemObjectData(obj))](const std::string& p0) {
 				data->set("activate", utils::numFromString<int>(p0).unwrapOr(0));
@@ -731,7 +777,7 @@ class $modify(CustomizeObjectLayerExt, CustomizeObjectLayer) {
 						handleTouchPriority(exmenu);
 						handleTouchPriority(scroll);
 						auto bar = Scrollbar::create(scroll);
-						bar->setAnchorPoint({1.f, 0.f});
+						bar->setAnchorPoint({ 1.f, 0.f });
 						pop->m_mainLayer->addChild(bar);
 					}
 				);
@@ -765,7 +811,7 @@ class $modify(TextGameObjectImageExt, TextGameObject) {
 			auto spr = CCSprite::create(name.c_str());
 			return (spr ? spr : CCSprite::create())->displayFrame();
 		}
-		
+
 		std::smatch matches;
 		if (std::regex_match(name, matches, std::regex(R"(^(https?)://([^/]+)(.*)$)"))) {
 			std::string scheme = matches[1];
@@ -776,7 +822,7 @@ class $modify(TextGameObjectImageExt, TextGameObject) {
 			log::info("Downloading: {}://{}{}", scheme, host, path);
 
 			std::shared_ptr<httplib::Client> cli;
-			
+
 			cli = std::make_shared<httplib::Client>(host);
 
 			cli->set_follow_location(true);
@@ -853,7 +899,7 @@ class $modify(TextGameObjectImageExt, TextGameObject) {
 		m_height = getContentHeight();
 		updateOrientedBox();
 	}
-	static TextGameObject* create(cocos2d::CCTexture2D* texture) {
+	static TextGameObject* create(cocos2d::CCTexture2D * texture) {
 		auto obj = TextGameObject::create(texture);
 		if (obj) {
 			obj->m_addToNodeContainer = true;

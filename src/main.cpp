@@ -54,6 +54,25 @@ class $modify(LoadingLayerExt, LoadingLayer) {
 			a->setColor(ccWHITE);
 		}
 
+		auto dialogIcon_6893 = CCFileUtils::get()->fullPathForFilename(
+			"dialogIcon_6893.png", 0
+		);
+		for (int a = 29; a <= 36; a++) {//036
+			CCFileUtils::get()->m_fullPathCache[
+				fmt::format("dialogIcon_0{}.png", a)
+			] = dialogIcon_6893;
+		}
+		CCFileUtils::get()->m_fullPathCache["dialogIcon_005.png"] = dialogIcon_6893;
+		CCFileUtils::get()->m_fullPathCache["dialogIcon_006.png"] = dialogIcon_6893;
+
+		auto walls = CCFileUtils::get()->fullPathForFilename(
+			"menuLoop/1465577_Walls-are-moving-but-I-can.mp3", 0
+		);
+		CCFileUtils::get()->m_fullPathCache["shop.mp3"] = walls;
+		CCFileUtils::get()->m_fullPathCache["shop3.mp3"] = walls;
+		CCFileUtils::get()->m_fullPathCache["shop4.mp3"] = walls;
+		CCFileUtils::get()->m_fullPathCache["shop5.mp3"] = walls;
+
 		return true;
 	}
 };
