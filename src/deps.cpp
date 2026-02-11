@@ -13,7 +13,7 @@ class $modify(CCSpriteFrameCache) {
 			auto content = file::readString(path.c_str()).unwrapOrDefault();
 			content = string::replace(content, "..", "/");
 			content = string::replace(content, Mod::get()->getID() + "/", "");
-			file::writeStringSafe(path, content).isOk();
+			file::writeStringSafe(path.c_str(), content).isOk();
 			//fuuuck
 			removeSpriteFramesFromFile(plist);
 		}
