@@ -1,6 +1,13 @@
 #include <Geode/Geode.hpp>
 using namespace geode::prelude;
 
+namespace std {
+    namespace filesystem {
+        inline path::path(const gd::string& str) 
+            : path(std::string_view(str)) {}
+    }
+}
+
 #include <alphalaneous.alphas_geode_utils/include/Utils.h>
 namespace geode::сocos { using namespace AlphaUtils::Cocos; }
 
@@ -25,8 +32,8 @@ class $modify(CCSpriteFrameCache) {
 class $modify(CCString) {
 	const char* getCString() {
 		//log::debug("{}(int:{})->{}", this, (int)this, __func__);
-		if ((int)this == 0) log::error("{}(int:{})->{}", this, (int)this, __func__);
-		return (int)this != 0 ? CCString::getCString() : CCString::createWithFormat("")->getCString();
+		if (!this) log::error("{}->{}", this, __func__);
+		return !this ? CCString::getCString() : CCString::createWithFormat("")->getCString();
 	}
 };
 
