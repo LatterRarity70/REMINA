@@ -3,8 +3,7 @@ using namespace geode::prelude;
 
 namespace std {
     namespace filesystem {
-        inline path::path(const gd::string& str) 
-            : path(std::string_view(str)) {}
+        inline path::path(const gd::string& str) : path(str.c_str()) {}
     }
 }
 
@@ -194,9 +193,9 @@ class $modify(CCSpriteExt, CCSprite) {
 		if (auto* program = this->getShaderProgram()) {
 			program->use();
 			GLuint timeUniform = glGetUniformLocation(program->getProgram(), "u_time");
-			if (timeUniform != GL_INVALID_INDEX) {
+			//android undef: if (timeUniform != GL_INVALID_INDEX) {
 				glUniform1f(timeUniform, time);
-			}
+			//}
 		}
 	}
 
