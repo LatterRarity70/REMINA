@@ -3,6 +3,12 @@
 #include <Geode/ui/GeodeUI.hpp>
 using namespace geode::prelude;
 
+#if defined(__APPLE__)
+#define NOT_APPLE(...)
+#else
+#define NOT_APPLE(...) __VA_ARGS__
+#endif
+
 #include <regex>
 
 #include <libs/httplib.h>

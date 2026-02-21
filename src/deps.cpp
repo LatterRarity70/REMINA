@@ -190,7 +190,7 @@ class $modify(CCFileUtilsResourcesExt, CCFileUtils) {
 			if (fileExistsInSearchPaths(noSub.c_str())) {
 				auto* texCache = CCTextureCache::get();
 				if (auto* tex = texCache->textureForKey(noSub.c_str())) {
-					texCache->reloadTexture(noSub.c_str());
+					NOT_APPLE(texCache->reloadTexture(noSub.c_str()));
 				}
 				return CCFileUtils::fullPathForFilename(noSub.c_str(), skipSuffix);
 			}
