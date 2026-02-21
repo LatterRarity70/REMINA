@@ -95,7 +95,8 @@ inline void SetupObjects() {
 			if (!data) return log::error("data == {}", data);
 			auto split = string::split(data->getID(), ":");
 			if (split.size() == 3 and split[0] == "set") {
-				getMod()->getSaveContainer()[split[1]] = matjson::parse(split[2]).unwrapOrDefault();
+				getMod()->getSaveContainer()[GameManager::get()->m_playerName]
+					[split[1]] = matjson::parse(split[2]).unwrapOrDefault();
 			}
 
 			object->m_objectID = svcondtrigger->m_refObjectID;
@@ -143,7 +144,8 @@ inline void SetupObjects() {
 						ButtonSprite::create("dump"), [](void*) {
 							MDPopup::create(
 								"Save container dump",
-								"```\n" + getMod()->getSaveContainer().dump() + "\n```",
+								"```\n" + getMod()->getSaveContainer()[GameManager::get()->m_playerName]
+								.dump() + "\n```",
 								"oh wow ok, fk..."
 							)->show();
 						}
@@ -176,9 +178,9 @@ inline void SetupObjects() {
 						sub->setColor(object->m_activateGroup ?
 							cc3bFromHexString("#00FF28").unwrapOrDefault()
 							: cc3bFromHexString("#FF0049").unwrapOrDefault()
-						);
+						); 
 						if (string::contains(str, "set:")) sub->setColor(
-							cc3bFromHexString("#0066FF").unwrapOrDefault()
+							cc3bFromHexString("#0067FF").unwrapOrDefault()
 						);
 					}
 					//"asd:=true (key:[!][=,<,>,*][value])"
@@ -192,7 +194,8 @@ inline void SetupObjects() {
 					matjson::Value value = matjson::parse(split[1].substr(1)).unwrapOrDefault();
 					if (key.empty() or cond.empty()) return void(); // log::error("key == {}, cond == {}", key, cond);
 					//log::debug("key == {}, cond == {}, value == {}", key, cond, value.dump());
-					auto sv = getMod()->getSaveContainer()[key];
+					auto sv = getMod()->getSaveContainer()[GameManager::get()->m_playerName]
+						[key];
 					//log::debug("sv == {}", sv.dump());
 					auto inv = string::contains(cond, "!");
 					auto& v = object->m_activateGroup;

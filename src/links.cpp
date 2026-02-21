@@ -5,6 +5,7 @@ using namespace geode::prelude;
 inline static std::string server = Mod::get()->getDescription().value_or("remina.bccst.ru");
 inline static auto links = matjson::parse(R"({
 	"asdasd": "asdasd",
+	"https://www.boomlings.com/GDEditor": "https://github.com/lil2kki/REMINA/wiki/Editor-Guide-(New-Features-List)#",
 	"https://www.robtopgames.com": "https://t.me/lil2kki_ch/6",
 	"https://www.boomlings.com/database/accounts/accountManagement.php": "https://remina.bccst.ru/dashboard/",
 	"https://store.steampowered.com/recommended/recommendgame/322170": "https://gdpshub.com/gdps/900",
