@@ -365,13 +365,17 @@ inline void SetupObjects() {
 #include <Geode/modify/EffectGameObject.hpp>
 class $modify(MenuItemGameObject, EffectGameObject) {
 
-	class CCMenuItem : public cocos2d::CCMenuItem {
+	class CCMenuItem : public CCMenuItemSpriteExtra {
 	public:
 		CREATE_FUNC(CCMenuItem);
 		virtual bool init() {
-			CCMenuItem::initWithTarget(this, nullptr);
+			CCMenuItemSpriteExtra::init(CCNode::create(), CCNode::create(), nullptr, nullptr);
 			this->setAnchorPoint({ 0.5f, 0.5f });
 			this->setEnabled(true);
+			m_animationEnabled = false;
+			m_colorEnabled = false;
+			m_activateSound = "no sound";
+			m_selectSound = "no sound";
 			return true;
 		};
 		std::function<void(void)> m_onActivate = []() {};

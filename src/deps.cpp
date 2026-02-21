@@ -124,13 +124,24 @@ class $modify(NodeVisitController, CCNode) {
 	}
 };
 
+#include <Geode/modify/FMODAudioEngine.hpp>
+class $modify(FMODAudioEngineResourcesExt, FMODAudioEngine) {
+	int playEffectAdvanced(gd::string strPath, float speed, float p2, float volume, float pitch, bool fastFourierTransform, bool reverb, int startMillis, int endMillis, int fadeIn, int fadeOut, bool loopEnabled, int p12, bool override, bool p14, int p15, int uniqueID, float minInterval, int sfxGroup) {
+		return FMODAudioEngine::playEffectAdvanced(
+			CCFileUtils::get()->fullPathForFilename(strPath.c_str(), 0).c_str(),
+			speed, p2, volume, pitch, fastFourierTransform, reverb, startMillis,
+			endMillis, fadeIn, fadeOut, loopEnabled, p12, override, p14, p15, uniqueID, minInterval, sfxGroup
+		);
+	}
+};
+
 #include <Geode/modify/CCFileUtils.hpp>
 class $modify(CCFileUtilsResourcesExt, CCFileUtils) {
 	inline static std::unordered_set<std::string> s_checkedDirs;
 	inline static std::unordered_map<std::string, std::vector<std::string>> s_randomDirs;
 
 	virtual gd::string fullPathForFilename(const char* pszFileName, bool skipSuffix) {
-		
+
 		std::string_view fileName(pszFileName);
 
 		auto lastDot = fileName.find_last_of('.');
