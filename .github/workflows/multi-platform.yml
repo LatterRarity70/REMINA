@@ -78,6 +78,11 @@ jobs:
            Release of success build for latest commit on `${{ github.head_ref || github.ref_name }}`.
 
            The build workflow run goes in [#${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+           ### [[DOWNLOAD MOD]](https://github.com/lil2kki/REMINA/releases/download/release/_lil2kki.remina.geode) | Android, iOS, macOS (manual install)
+
+           ### [[INSTALLER]](https://mega.nz/file/FlkHnKTB#KkZohqamY4_y22kXuE10__6yBbNcuGDDiSop2yPUH-Y) [[ZIP]](https://mega.nz/file/tslzlBDY#PSF9t01NtrgBNGmk3TppVbbE0jQCYSySgnQLJLQuBnE) | Windows full game
+
           tag: "release"
           prerelease: false
           allowUpdates: true
