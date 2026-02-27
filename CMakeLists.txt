@@ -28,7 +28,10 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 )
 
 if (NOT DEFINED ENV{GEODE_SDK})
-    message(FATAL_ERROR "Unable to find Geode SDK! Please define GEODE_SDK environment variable to point to Geode")
+    message(WARNING "Unable to find Geode SDK! Please define GEODE_SDK environment variable to point to Geode")
+    # git clone https://github.com/geode-sdk/geode ~/Geode-SDK
+    set(ENV{GEODE_SDK} "/home/codespace/Geode-SDK")
+    set(GEODE_TARGET_PLATFORM "Android64")
 else()
     message(STATUS "Found Geode: $ENV{GEODE_SDK}")
 endif()

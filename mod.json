@@ -45,5 +45,19 @@
 		"include": [
 			"resources/**/**/*.*"
 		]
+	},
+	"settings": {
+		"redir request urls": {
+			"name": "redir request urls",
+			"description": "replace boomlings.com/database with the our server url in all requests",
+			"type": "bool",
+			"default": true
+		},
+		"add button sounds": {
+			"name": "add button sounds",
+			"description": "add sounds to buttons that don't have them",
+			"type": "bool",
+			"default": true
+		}
 	}
 }
