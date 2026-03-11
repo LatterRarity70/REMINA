@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.21)
-set(CMAKE_CXX_STANDARD 20) # intellisense feels bad at 23
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS" OR IOS)
     set(CMAKE_OSX_ARCHITECTURES "arm64")
@@ -27,7 +26,10 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     _WINSOCK_DEPRECATED_NO_WARNINGS
 )
 
-target_compile_options(${PROJECT_NAME} PRIVATE -Wno-implicit-const-int-float-conversion)
+#target_compile_options(${PROJECT_NAME} PRIVATE 
+#-Wno-implicit-const-int-float-conversion 
+#-Wno-undefined-bool-conversion
+#)
 
 if (NOT DEFINED ENV{GEODE_SDK})
     message(WARNING "Unable to find Geode SDK! Please define GEODE_SDK environment variable to point to Geode")

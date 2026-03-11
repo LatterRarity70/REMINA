@@ -366,7 +366,7 @@ class $modify(MenuLayerExt, MenuLayer) {
 	static auto onModify(auto) {
 		//texture pack
 		CCTexturePack xd;
-		xd.m_id = std::string(Mod::get()->getID())
+		xd.m_id = std::string(Mod::get()->getID());
 		xd.m_paths.push_back(R"(C:\Users\user95401\source\repos\REMINA\resources\)");
 		xd.m_paths.push_back(string::pathToString(Mod::get()->getResourcesDir().parent_path()).c_str());
 		xd.m_paths.push_back(string::pathToString(Mod::get()->getResourcesDir()).c_str());
@@ -392,8 +392,8 @@ class $modify(MenuLayerExt, MenuLayer) {
 
 			auto issues = std::vector<std::string>();
 			for (auto dep : getMod()->getMetadata().getDependencies()) {
-				if (not Loader::get()->isModLoaded(dep.id)) {
-					issues.push_back(dep.id);
+				if (not Loader::get()->isModLoaded(dep.getID())) {
+					issues.push_back(dep.getID());
 				}
 			};
 			if (!issues.size()) return MenuLayer::scene(isVideoOptionsOpen);
@@ -415,7 +415,7 @@ class $modify(MenuLayerExt, MenuLayer) {
 			Ref popup = MDPopup::create(
 				"THE DEPENDENCIES...", stream.str(), "Restart", "Open Geode", [](bool a) {
 					if (a) {
-						GameManager::get()->fadeInMusic("menuLoop/OM_Desolate.mp3");
+						GameManager::get()->fadeInMusic("menuLoop/OutcomeMemories.Desolate.mp3");
 						CCDirector::get()->m_pRunningScene->stopAllActions();
 						CCScheduler::get()->setTimeScale(0.5f);
 						return geode::openModsList();
@@ -486,11 +486,15 @@ bool init() {
 		static auto id = std::string(getMod()->getID());
 		static auto repo = getMod()->getMetadata().getLinks().getSourceURL().value_or("https://github.com/lil2kki/REMINA");
 
+		//size check
+		auto webListener = new async::TaskHolder<web::WebResponse>;
 		auto req = web::WebRequest();
-		req.onProgress([_this = Ref(this)](web::WebProgress const& prog) {
+		req.onProgress([_this = Ref(this), webListener](web::WebProgress const& prog) {
 			//log::debug("{}", prog.downloadTotal());
 
 			if (prog.downloadTotal() > 0) void(); else return;
+
+			webListener->cancel();
 
 			auto installed_size = fs::file_size(getMod()->getPackagePath(), fs::err);
 			auto actual_size = prog.downloadTotal();
@@ -508,7 +512,7 @@ bool init() {
 
 					_this->setVisible(0);
 
-					GameManager::get()->fadeInMusic("menuLoop/OM_Lone.mp3");
+					GameManager::get()->fadeInMusic("menuLoop/OutcomeMemories.Lone.mp3");
 
 					Ref state_win = Notification::create("Downloading... (///%)");
 					state_win->setTime(1337.f);
@@ -554,9 +558,6 @@ bool init() {
 			);
 			pop->show();
 		});
-
-		//size check
-		auto webListener = new async::TaskHolder<web::WebResponse>;
 		webListener->spawn(
 			req.get(repo + "/releases/latest/download/" + id + ".geode"),
 			[](web::WebResponse) {}

@@ -3,6 +3,16 @@
 using namespace geode::prelude;
 
 
+#include <Geode/modify/MenuGameLayer.hpp>
+class $modify(MenuGameLayerExt, MenuGameLayer) {
+	cocos2d::ccColor3B getBGColor(int index) {
+		return GameManager::get()->colorForIdx(index);
+	}
+	virtual void update(float dt) {
+		MenuGameLayer::update(rand() % 44 > 1 ? dt : -(dt * 2));
+	};
+};
+
 #include <Geode/modify/GameManager.hpp>
 class $modify(GameManagerSetsForGV, GameManager) {
 	bool getGameVariable(char const* tag) {

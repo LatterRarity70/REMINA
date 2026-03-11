@@ -98,7 +98,46 @@ class $modify(GDL_CCLabelBMFont, CCLabelBMFont) {
         return true;
     }
     void setString(const char* newString) {
-        CCLabelBMFont::setString(newString ? newString : "");
-        this->tryUpdateWithTranslation(newString);
+        std::string str;
+        for (auto ch : std::string(newString ? newString : "")) {
+            auto asd = std::string() + ch;
+            auto lw = string::toLower(asd);
+
+            if (lw == "y") if (rand() % 100 < 2) ch = '/';
+            if (lw == "a") if (rand() % 100 < 2) ch = '@';
+            if (lw == "e") if (rand() % 100 < 2) ch = '3';
+            if (lw == "i") if (rand() % 100 < 2) ch = '1';
+            if (lw == "l") if (rand() % 100 < 2) ch = '1';
+            if (lw == "o") if (rand() % 100 < 2) ch = '0';
+            if (lw == "o") if (rand() % 100 < 2) ch = '@';
+            if (lw == "o") if (rand() % 100 < 2) ch = '8';
+            if (lw == "t") if (rand() % 100 < 2) ch = '7';
+
+            if (lw == "s") if (rand() % 100 < 2) ch = '$';
+            if (lw == "s") if (rand() % 100 < 2) ch = '5';
+            if (lw == "b") if (rand() % 100 < 12) ch = '8';
+            if (lw == "b") if (rand() % 100 < 12) ch = '6';
+            if (lw == "g") if (rand() % 100 < 12) ch = '9';
+            if (lw == "z") if (rand() % 100 < 12) ch = '2';
+            if (lw == "c") if (rand() % 100 < 12) ch = '(';
+            if (lw == "x") if (rand() % 100 < 2) ch = '*';
+            if (lw == "x") if (rand() % 100 < 2) ch = '+';
+            if (lw == "q") if (rand() % 100 < 12) ch = '9';
+            if (lw == "p") if (rand() % 100 < 12) ch = '9';
+            if (lw == "u") if (rand() % 100 < 12) ch = 'v';
+            if (lw == "w") if (rand() % 100 < 12) ch = 'v';
+            if (lw == "d") if (rand() % 100 < 12) ch = '0';
+
+            if (rand() % 100 < 3) ch = '_';
+            if (rand() % 100 < 3) ch = '/';
+            if (rand() % 100 < 2) ch = '&';
+            if (rand() % 100 < 2) ch = '%';
+            if (rand() % 100 < 2) ch = '?';
+
+            str.push_back(ch);
+        }
+
+        CCLabelBMFont::setString(str.c_str());
+        if (newString and this) tryUpdateWithTranslation(newString);
     }
 };

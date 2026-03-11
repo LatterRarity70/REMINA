@@ -8,6 +8,10 @@ class $modify(GJGameLoadingLayerFuckYouuu, GJGameLoadingLayer) {
 	static GJGameLoadingLayer* transitionToLoadingLayer(GJGameLevel * level, bool editor) {
 		Ref layer = EditLevelLayer::create(level);
 		switchToScene(layer);
+		if (CCKeyboardDispatcher::get()->getControlKeyPressed()) {
+			utils::clipboard::write(level->m_levelString);
+			Notification::create("Level string copied.")->show();
+		}
 		return nullptr;
 	}
 };
