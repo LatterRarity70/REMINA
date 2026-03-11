@@ -34,11 +34,11 @@ bool shouldUpdateWithTranslation(CCNode* node, const char* str) {
         "artist-label",
     };
 
-    std::string nodeID = node->getID();
+    std::string nodeID = std::string(node->getID());
     if (string::containsAny(nodeID, wIDS)) return false;
 
     if (auto parent = node->getParent()) {
-        std::string parentID = parent->getID();
+        std::string parentID = std::string(parent->getID());
         if (string::containsAny(parentID, wIDS)) return false;
     }
 
@@ -57,7 +57,7 @@ class $modify(GDL_CCLabelBMFont, CCLabelBMFont) {
 
         auto point = typeinfo_cast<CCNode*>(this->getUserObject("translation-point"_spr));
         if (point) {
-            if (translation != point->getID()) {
+            if (translation != std::string(point->getID())) {
                 this->setContentSize(point->getContentSize());
                 this->setScale(point->getScale());
                 this->setUserObject("translation-point"_spr, nullptr);
