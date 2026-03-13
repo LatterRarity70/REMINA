@@ -2,6 +2,54 @@
 
 using namespace geode::prelude;
 
+$on_game(TexturesLoaded) {
+	//mirrasovers
+	Ref mirrasovers = CCSprite::create();
+	mirrasovers->setAnchorPoint({ 0, 0 });
+	mirrasovers->setID("mirrasovers");
+	//add
+	OverlayManager::get()->addChild(mirrasovers);
+	//vars
+	auto name = fmt::format("mirrasovers{}.png", ++mirrasovers->m_nTag);
+	while (fileExistsInSearchPaths(name.c_str())) {
+		auto entry = CCSprite::create(name.c_str());
+		entry->CCNode::setScale(
+			CCDirector::get()->getWinSize().width / entry->getContentSize().width,
+			CCDirector::get()->getWinSize().height / entry->getContentSize().height
+		);
+		entry->setAnchorPoint({ 0, 0 });
+		mirrasovers->addChild(entry);
+		name = fmt::format("mirrasovers{}.png", ++mirrasovers->m_nTag);
+	}
+	//actions
+	mirrasovers->runAction(CCRepeatForever::create(CCSequence::create(
+		CCDelayTime::create(0.1f), CallFuncExt::create(
+			[mirrasovers] {
+				auto game = GameManager::get()->m_gameLayer;
+				mirrasovers->setVisible(!game or (game and not game->isRunning()));
+			}
+		), nullptr
+	)));
+	mirrasovers->runAction(CCRepeatForever::create(CCSequence::create(
+		CCDelayTime::create(0.1f), CallFuncExt::create(
+			[mirrasovers] {
+				if (rand() % 100 < 10) return;
+				//hide all children, then show a random one
+				for (auto child : mirrasovers->getChildrenExt()) 
+					child->setVisible(false);
+				//here 
+				auto hi = mirrasovers->getChildByType<CCSprite>(
+					rand() % mirrasovers->getChildrenCount()
+				); 
+				hi->setVisible(true);
+				hi->setFlipX(rand() % 2);
+				hi->setFlipY(rand() % 2);
+			}
+		), nullptr
+	)));
+	mirrasovers->setCascadeOpacityEnabled(true);
+	mirrasovers->setOpacity(60);
+};
 
 #include <Geode/modify/MenuGameLayer.hpp>
 class $modify(MenuGameLayerExt, MenuGameLayer) {
@@ -56,6 +104,15 @@ class $modify(FLAlertLayerExt, FLAlertLayer) {
 		//nothing
 		return true;
 	};
+	void show() {
+		//put popup in next scene, not transition
+		m_scene = m_scene ? m_scene : CCDirector::get()->getRunningScene();
+		if (auto trans = typeinfo_cast<CCTransitionScene*>(m_scene)) {
+			m_scene = trans->m_pInScene;
+		}
+
+		FLAlertLayer::show();
+	}
 };
 
 #include <Geode/modify/LoadingLayer.hpp>

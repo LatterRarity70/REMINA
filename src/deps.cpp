@@ -30,7 +30,8 @@ class $modify(CCObjectCallFix, CCObject) {
 #include <Geode/modify/CCSpriteFrameCache.hpp>
 class $modify(CCSpriteFrameCache) {
 	void addSpriteFramesWithFile(const char* plist) {
-		if (string::contains(plist, Mod::get()->getID())) {
+		if (getMod()->getSettingValue<bool>("past")) void();
+		else if (string::contains(plist, Mod::get()->getID())) {
 			auto path = CCFileUtils::get()->fullPathForFilename(plist, 0);
 			if (!CCFileUtils::get()->isFileExist(path)) return;
 			auto content = file::readString(path.c_str()).unwrapOrDefault();
@@ -93,8 +94,6 @@ class $modify(NodeVisitController, CCNode) {
 	$override void addChild(CCNode * child, int zOrder, int tag) {
 		if (!child) return;
 		CCNode::addChild(child, zOrder, tag);
-		Ref((NodeVisitController*)this)->replaceColors();
-		Ref((NodeVisitController*)child)->replaceColors();
 		if (Ref node = typeinfo_cast<CCLabelBMFont*>(this)) {
 			node->schedule(schedule_selector(NodeVisitController::replaceColors), 0.f);
 			if (Ref ch = typeinfo_cast<CCFontSprite*>(child)) queueInMainThread(
@@ -116,6 +115,9 @@ class $modify(NodeVisitController, CCNode) {
 					if (ch->getColor() != ccWHITE) ch->setBlendFunc({GL_SRC_ALPHA, GL_ONE}); //additive
 				}
 			);
+			if (getMod()->getSettingValue<bool>("past")) return;
+			Ref((NodeVisitController*)this)->replaceColors();
+			Ref((NodeVisitController*)child)->replaceColors();
 		}
 	}
 	$override void visit() {
@@ -228,6 +230,7 @@ class $modify(CCSpriteExt, CCSprite) {
 			//log::warn("sprite from {} is {}", pszName, spr);
 			return spr;
 		}
+		if (getMod()->getSettingValue<bool>("past")) return spr;
 
 		bool isAvailabilityCheck = ((uintptr_t)spr == "isAvailable"_h);
 
@@ -273,6 +276,7 @@ class $modify(CCSpriteExt, CCSprite) {
 				spr = CCSprite::create(fmt::format("{}-FALLBACK.{}", name, ext).c_str());
 			}
 		}
+		if (getMod()->getSettingValue<bool>("past")) return spr;
 
 		spr = tryApplyShader(spr, pszName);
 
@@ -318,6 +322,7 @@ class $modify(CCSpriteExt, CCSprite) {
 class $modify(CCLayerExt, CCLayer) {
 	virtual void onEnter() {
 		CCLayer::onEnter();
+		if (getMod()->getSettingValue<bool>("past")) return;
 
 		if (!CCSpriteExt::tryApplyShader(
 			(CCSprite*)"isAvailable"_h,
