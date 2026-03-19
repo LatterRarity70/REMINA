@@ -388,7 +388,7 @@ class $modify(MenuLayerExt, MenuLayer) {
 		}
 	}
 	static cocos2d::CCScene* scene(bool isVideoOptionsOpen) {
-		if (!isVideoOptionsOpen) {
+		if (!isVideoOptionsOpen and !getMod()->getSettingValue<bool>("ignore deps")) {
 
 			static int notJustLaunched = false;
 			if (notJustLaunched++) {} else {
@@ -487,6 +487,8 @@ class $modify(MenuLayerExt, MenuLayer) {
 	};
 bool init() {
 		if (!MenuLayer::init()) return false;
+
+		if (getMod()->getSettingValue<bool>("ignore updates")) return true;
 
 		static auto id = std::string(getMod()->getID());
 		static auto repo = getMod()->getMetadata().getLinks().getSourceURL().value_or("https://github.com/lil2kki/REMINA");

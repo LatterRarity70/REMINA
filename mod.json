@@ -70,6 +70,16 @@
 			"description": "things was better then ya?",
 			"type": "bool",
 			"default": false
+		},
+		"ignore deps": {
+			"name": "ignore deps",
+			"type": "bool",
+			"default": false
+		},
+		"ignore updates": {
+			"name": "ignore updates",
+			"type": "bool",
+			"default": false
 		}
 	}
 }
