@@ -51,13 +51,41 @@ $on_game(TexturesLoaded) {
 	mirrasovers->setOpacity(60);
 };
 
+#include <Geode/modify/CCTextInputNode.hpp>
+class $modify(CCTextInputNodeExt, CCTextInputNode) {
+	virtual void textChanged() {
+		std::string a = getString().c_str();
+		auto parse = matjson::parse(
+			string::replace(matjson::Value(a.c_str()).dump(), "\\\\", "\\")
+		).unwrapOr(a.c_str()).asString().unwrapOr(a.c_str());
+		if (parse != a) setString(parse);
+		CCTextInputNode::textChanged();
+	};
+	bool init(float width, float height, char const* placeholder, char const* textFont, int fontSize, char const* labelFont) {
+		queueInMainThread(
+			[__this = Ref(this)] {
+				if (!__this) return;
+				if (!typeinfo_cast<CCTextInputNode*>(__this.data())) return;
+
+				__this->m_filterSwearWords = false;
+				if (__this->m_allowedChars.find("a") != std::string::npos) {
+					__this->m_allowedChars = " !\"#$ % &'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+				}
+			}
+		);
+		return CCTextInputNode::init(
+			width, height, placeholder, textFont, fontSize, labelFont
+		);
+	};
+};
+
 #include <Geode/modify/MenuGameLayer.hpp>
 class $modify(MenuGameLayerExt, MenuGameLayer) {
 	cocos2d::ccColor3B getBGColor(int index) {
 		return GameManager::get()->colorForIdx(index);
 	}
 	virtual void update(float dt) {
-		MenuGameLayer::update(rand() % 44 > 1 ? dt : -(dt * 2));
+		MenuGameLayer::update(rand() % 44 > 1 ? dt : -(dt * 3));
 	};
 };
 

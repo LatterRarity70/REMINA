@@ -1,5 +1,5 @@
 {
-	"geode": "5.3.0",
+	"geode": "5.4.1",
 	"early-load": true,
 	"gd": {
 		"win": "2.2081",
@@ -8,7 +8,7 @@
 		"ios": "2.2081"
 	},
 	"id": "_lil2kki.remina",
-	"name": "\u0000",
+	"name": "\u000a",
 	"version": "v0.0.0-alpha.1",
 	"developers": [ "\u0000" ],
 	"description": "remina.bccst.ru",

@@ -91,7 +91,7 @@ class $modify(GDL_CCLabelBMFont, CCLabelBMFont) {
             std::string str = pszstr; // паранорман
             queueInMainThread([__this = Ref(this), str] {
                 if (__this && !str.empty()) {
-                    __this->tryUpdateWithTranslation(str.c_str());
+                    if (str == __this->getString()) __this->setString(str.c_str());
                 }
                 });
         }

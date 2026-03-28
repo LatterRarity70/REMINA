@@ -5,6 +5,8 @@ using namespace geode::prelude;
 inline static std::string server = Mod::get()->getDescription().value_or("remina.bccst.ru");
 inline static auto links = matjson::parse(R"({
 	"asdasd": "asdasd",
+	"https://www.boomlings.com/database/accounts/lostpassword.php": "https://github.com/lil2kki/REMINA/issues/new",
+	"https://www.boomlings.com/database/accounts/lostusername.php": "https://github.com/lil2kki/REMINA/issues/new",
 	"https://clck.su/TzzLu": "https://t.me/lil2kki_ch/6",
 	"https://www.boomlings.com/GDEditor": "https://github.com/lil2kki/REMINA/wiki/Editor-Guide-(New-Features-List)#",
 	"https://www.robtopgames.com": "https://t.me/lil2kki_ch/6",
@@ -35,6 +37,7 @@ class $modify(CCHttpClientLinksReplace, CCHttpClient) {
 class $modify(CCApplicationLinksReplace, CCApplication) {
 	void openURL(const char* psz) {
 		std::string url = psz;
+		log::debug("{}.url = {}", __FUNCTION__, url);
 		url = not links.contains(url) ? url : links[url].asString().unwrapOr(url);
 		if (getMod()->getSettingValue<bool>("redir request urls")) {
 			url = string::replace(url, "https://www.twitter.com/", "https://t.me/");
@@ -43,7 +46,6 @@ class $modify(CCApplicationLinksReplace, CCApplication) {
 		} else {
 			url = string::replace(url, server, "www.boomlings.com/database");
 		}
-		//log::debug("{}.url = {}", __FUNCTION__, url);
 		return CCApplication::openURL(url.data());
 	}
 };

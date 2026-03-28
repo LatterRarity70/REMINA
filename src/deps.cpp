@@ -204,6 +204,17 @@ class $modify(CCFileUtilsResourcesExt, CCFileUtils) {
 
 #include <Geode/modify/CCSprite.hpp>
 class $modify(CCSpriteExt, CCSprite) {
+	static void onModify(auto& self) {
+		auto names = {
+			"cocos2d::CCSprite::initWithSpriteFrameName",
+			"cocos2d::CCSprite::initWithFile",
+			"cocos2d::CCSprite::create",
+			"cocos2d::CCSprite::createWithSpriteFrameName",
+		};
+		for (auto name : names) if (!self.setHookPriorityPost(name, Priority::Last)) {
+			log::error("Failed to set hook priority for {}.", name);
+		}
+	}
 	void updateShader(float deltaTime) {
 		static float time = 0.0f;
 		time += deltaTime;
@@ -282,18 +293,26 @@ class $modify(CCSpriteExt, CCSprite) {
 
 		return spr;
 	}
-	static auto createAsSizeFixedSpr(const char* pszName, float h) {
+	static auto createAsSizeFixedSpr(const char* pszName, float h = 0.f) {
 		auto* spr = CCSprite::create(pszName);
-		queueInMainThread([spr = Ref(spr), h] {
+		if (h) queueInMainThread([spr = Ref(spr), h] {
 			if (spr) limitNodeHeight(spr, h, 99.f, 0.1f);
 			});
 		return spr;
 	}
 	static CCSprite* createWithSpriteFrameName(const char* pszName) {
-		if (strcmp(pszName, "GJ_logo_001.png") == 0) 
-			return createAsSizeFixedSpr(pszName, 44.750f);
-		if (strcmp(pszName, "RobTopLogoBig_001.png") == 0) 
-			return createAsSizeFixedSpr(pszName, 24.000f);
+
+		static auto bruh = std::unordered_map<std::string, float>();
+		if (bruh.empty()) for (auto a : file::readDirectory(
+			Mod::get()->getResourcesDir().parent_path(), 1).unwrapOrDefault()
+			) {
+			bruh[string::pathToString(a.filename())] = utils::numFromString<float>(file::readString(
+				a.parent_path() / (string::pathToString(a.filename()) + ".sz")
+			).unwrapOrDefault()).unwrapOrDefault();
+		}
+
+		if (bruh.contains(pszName)) //44.750
+			return createAsSizeFixedSpr(pszName, bruh[pszName]);
 
 		auto* spr = CCSprite::createWithSpriteFrameName(pszName);
 

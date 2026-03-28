@@ -783,8 +783,46 @@ class $modify(UILayerKeysExt, UILayer) {
 	}
 };
 
+#include <Geode/modify/GJBaseGameLayer.hpp>
+class $modify(EventsExt, GJBaseGameLayer) {
+	inline static int _s = 78;
+	inline static int OnForce = _s + 1;
+	inline static int OnSpeedModifer = _s + 2;
+	inline static int OnInverted = _s + 3;
+	inline static int OnUninverted = _s + 4;
+	inline static int CollisionTop = _s + 5;
+	inline static int CollisionBottom = _s + 6;
+	inline static int CollisionLeft = _s + 7;
+	inline static int CollisionRight = _s + 8;
+	static gd::string gameEventToString(GJGameEvent event) {
+		auto id = (int)event;
+		if (id == OnForce) return "NO IMPL'// On Force";
+		if (id == OnSpeedModifer) return "NO IMPL'//On Speed Modifer";
+		if (id == OnInverted) return "NO IMPL'//On Inverted";
+		if (id == OnUninverted) return "NO IMPL'//On Un-inverted";
+		if (id == CollisionTop) return "NO IMPL'//Collision Top";
+		if (id == CollisionBottom) return "NO IMPL'//Collision Bottom";
+		if (id == CollisionLeft) return "NO IMPL'//Collision Left";
+		if (id == CollisionRight) return "NO IMPL'//Collision Right";
+		return GJBaseGameLayer::gameEventToString(event);
+	}
+};
+
 #include <Geode/modify/SelectEventLayer.hpp>
 class $modify(SelectEventLayerKeysExt, SelectEventLayer) {
+	void addToggle(int id, gd::string info) {
+		SelectEventLayer::addToggle(id, info);
+		if (id != 78) return;
+		//wth... static gd::string GJBaseGameLayer::gameEventToString(GJGameEvent event);
+		SelectEventLayer::addToggle(EventsExt::OnForce, "Activate a group when touching a force block");
+		SelectEventLayer::addToggle(EventsExt::OnSpeedModifer, "Activate a group when touching any speed modifer");
+		SelectEventLayer::addToggle(EventsExt::OnInverted, "Activate a group when camera is reverted");
+		SelectEventLayer::addToggle(EventsExt::OnUninverted, "Activate a group when camera is reverted");
+		SelectEventLayer::addToggle(EventsExt::CollisionTop, "Activate a group when player update collision in top direction");
+		SelectEventLayer::addToggle(EventsExt::CollisionBottom, "Activate a group when player update collision in bottom direction");
+		SelectEventLayer::addToggle(EventsExt::CollisionLeft, "Activate a group when player update collision in left direction");
+		SelectEventLayer::addToggle(EventsExt::CollisionRight, "Activate a group when player update collision in right direction");
+	}
 	bool init(SetupEventLinkPopup * p0, gd::set<int>&p1) {
 		if (!SelectEventLayer::init(p0, p1)) return false;
 
@@ -844,6 +882,92 @@ class $modify(SelectEventLayerKeysExt, SelectEventLayer) {
 		Ref(this)->m_buttonMenu->addChild(keyEventsExpandBtn);
 
 		return true;
+	}
+};
+
+
+#include <Geode/modify/LevelEditorLayer.hpp>
+class $modify(LevelEditorLayerExt, LevelEditorLayer) {
+	void onPlaytest() {
+		LevelEditorLayer::onPlaytest();
+	}
+	virtual void playerTookDamage(PlayerObject * player) {
+		player->playDeathEffect();
+		LevelEditorLayer::playerTookDamage(player);
+	}
+};
+
+#include <Geode/modify/GJBaseGameLayer.hpp>
+class $modify(GJBaseGameLayerExt, GJBaseGameLayer) {
+	void resetPlayer() {
+		GJBaseGameLayer::resetPlayer();
+		for (auto p : { this->m_player1, this->m_player2 }) {
+			if (p) p->m_customScaleX = 1.f;
+			if (p) p->m_customScaleY = 1.f;
+		}
+	}
+};
+
+#include <Geode/modify/PlayerObject.hpp>
+class $modify(PlayerObjectExt, PlayerObject) {
+	void updateCollide(PlayerCollisionDirection direction, GameObject * object) {
+		PlayerObject::updateCollide(direction, object);
+		if (auto a = m_gameLayer) a->gameEventTriggered(
+			(GJGameEvent)(EventsExt::CollisionTop + (int)direction), 
+			0, 1 + a->m_player2 == this
+		);
+	};
+	//bool collidedWithObject(float dt, GameObject* object, cocos2d::CCRect rect, bool skipCheck) {};
+	bool init(int p0, int p1, GJBaseGameLayer * p2, cocos2d::CCLayer * p3, bool p4) {
+		if (!PlayerObject::init(p0, p1, p2, p3, p4)) return false;
+
+		queueInMainThread(
+			[_this = Ref(this), p2 = Ref(p2)] {
+				if (!typeinfo_cast<LevelEditorLayer*>(p2.data())) return;
+				if (_this == p2->m_player1) _this->addAllParticles();
+				if (_this == p2->m_player2) _this->addAllParticles();
+			}
+		);
+
+		return true;
+	}
+	void resetObject() {
+		PlayerObject::resetObject();
+		m_mainLayer->setVisible(1);
+		m_customScaleY = 1.f;
+		m_customScaleX = 1.f;
+	}
+	void resetPlayerIcon() {
+		PlayerObject::resetPlayerIcon();
+	}
+	void update(float p0) {
+		PlayerObject::update(p0 * (m_customScaleY > 0.001 ? m_customScaleY : 1.f));
+	}
+	void updateRotation(float p0) {
+		PlayerObject::updateRotation(p0 * (m_customScaleX > 0.001 ? m_customScaleX : 1.f));
+	}
+};
+
+
+#include <Geode/modify/EffectGameObject.hpp>
+class $modify(EffectGameObjectExt, EffectGameObject) {
+	void customSetup() {
+		EffectGameObject::customSetup();
+	}
+	void triggerActivated(float p0) {
+		EffectGameObject::triggerActivated(p0);
+	}
+	void triggerObject(GJBaseGameLayer * p0, int p1, gd::vector<int> const* p2) {
+		if (m_objectID == 1613 or m_objectID == 1612) {
+			if (m_hasNoEffects) {
+				for (auto p : { p0->m_player1, p0->m_player2 }) if (p) {
+					p->m_mainLayer->setVisible(m_objectID == 1613); //is show?
+				}
+				return;
+			}
+			for (auto p : { p0->m_player1, p0->m_player2 }) p->m_mainLayer->setVisible(1);
+		}
+		EffectGameObject::triggerObject(p0, p1, p2);
 	}
 };
 
@@ -1054,57 +1178,5 @@ class $modify(TextGameObjectImageExt, TextGameObject) {
 		TextGameObject::updateTextObject(p0, p1);
 		if (this) unschedule(schedule_selector(TextGameObjectImageExt::trySetupCustomSprite));
 		if (this) scheduleOnce(schedule_selector(TextGameObjectImageExt::trySetupCustomSprite), 0.01f);
-	}
-};
-
-
-#include <Geode/modify/LevelEditorLayer.hpp>
-class $modify(LevelEditorLayerExt, LevelEditorLayer) {
-	void onPlaytest() {
-		LevelEditorLayer::onPlaytest();
-	}
-	virtual void playerTookDamage(PlayerObject * player) {
-		player->playDeathEffect();
-		LevelEditorLayer::playerTookDamage(player);
-	}
-};
-
-
-#include <Geode/modify/GJBaseGameLayer.hpp>
-class $modify(GJBaseGameLayerExt, GJBaseGameLayer) {
-	void resetPlayer() {
-		GJBaseGameLayer::resetPlayer();
-		for (auto p : { this->m_player1, this->m_player2 }) {
-			if (p) p->m_customScaleX = 1.f;
-			if (p) p->m_customScaleY = 1.f;
-		}
-	}
-};
-
-#include <Geode/modify/PlayerObject.hpp>
-class $modify(PlayerObjectExt, PlayerObject) {
-	bool init(int p0, int p1, GJBaseGameLayer * p2, cocos2d::CCLayer * p3, bool p4) {
-		if (!PlayerObject::init(p0, p1, p2, p3, p4)) return false;
-
-		queueInMainThread(
-			[_this = Ref(this), p2 = Ref(p2)] {
-				if (!typeinfo_cast<LevelEditorLayer*>(p2.data())) return;
-				if (_this == p2->m_player1) _this->addAllParticles();
-				if (_this == p2->m_player2) _this->addAllParticles();
-			}
-		);
-
-		return true;
-	}
-	void resetPlayerIcon() {
-		PlayerObject::resetPlayerIcon();
-		m_customScaleY = 1.f;
-		m_customScaleX = 1.f;
-	}
-	void update(float p0) {
-		PlayerObject::update(p0 * (m_customScaleY > 0.001 ? m_customScaleY : 1.f));
-	}
-	void updateRotation(float p0) {
-		PlayerObject::updateRotation(p0 * (m_customScaleX > 0.001 ? m_customScaleX : 1.f));
 	}
 };
