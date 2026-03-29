@@ -68,7 +68,7 @@ class $modify(CCTextInputNodeExt, CCTextInputNode) {
 				if (!typeinfo_cast<CCTextInputNode*>(__this.data())) return;
 
 				__this->m_filterSwearWords = false;
-				if (__this->m_allowedChars.find("a") != std::string::npos) {
+				if (std::string(__this->m_allowedChars.c_str()).find("a") != std::string::npos) {
 					__this->m_allowedChars = " !\"#$ % &'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
 				}
 			}
