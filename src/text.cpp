@@ -149,3 +149,29 @@ class $modify(GDL_CCLabelBMFont, CCLabelBMFont) {
         if (newString and this) tryUpdateWithTranslation(newString);
     }
 };
+
+#include <Geode/modify/CCActionInterval.hpp>
+class $modify(DialogTextAnimExt, CCActionInterval) {
+    $override void startWithTarget(CCNode * p0) {
+        //log::debug("{}->{}({})", this, __FUNCTION__, p0);
+        //CCFadeIn, ::startWithTarget({ CCFontSprite, 
+        if (typeinfo_cast<CCFadeIn*>(this)) if (typeinfo_cast<CCFontSprite*>(p0)) {
+            Ref fade = typeinfo_cast<CCFadeIn*>(this);
+            Ref sprite = typeinfo_cast<CCFontSprite*>(p0);
+            if (sprite) sprite->runAction(CCSequence::createWithTwoActions(
+                CCDelayTime::create(fade ? fade->getDuration() : 0.1f), CallFuncExt::create(
+                    [sprite] {
+                        if (!sprite) return;
+                        sprite->setVisible(1);
+                        sprite->setOpacity(255);
+                        if (not sprite->getContentSize().isZero()) {
+                            FMODAudioEngine::get()->playEffect("_text.ogg");
+                        };
+                    }
+                )
+            ));
+            return;
+        }
+        return CCActionInterval::startWithTarget(p0);
+    }
+};

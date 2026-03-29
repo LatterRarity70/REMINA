@@ -30,10 +30,12 @@ $on_game(TexturesLoaded) {
 			}
 		), nullptr
 	)));
+	mirrasovers->setCascadeOpacityEnabled(true);
 	mirrasovers->runAction(CCRepeatForever::create(CCSequence::create(
 		CCDelayTime::create(0.1f), CallFuncExt::create(
 			[mirrasovers] {
 				if (rand() % 100 < 10) return;
+				mirrasovers->setOpacity(10 + (rand() % 50));
 				//hide all children, then show a random one
 				for (auto child : mirrasovers->getChildrenExt()) 
 					child->setVisible(false);
@@ -47,8 +49,6 @@ $on_game(TexturesLoaded) {
 			}
 		), nullptr
 	)));
-	mirrasovers->setCascadeOpacityEnabled(true);
-	mirrasovers->setOpacity(60);
 };
 
 #include <Geode/modify/CCTextInputNode.hpp>

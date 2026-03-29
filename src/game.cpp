@@ -253,9 +253,9 @@ inline void SetupObjects() {
 				if (!player) return;
 				Ref layer = player->m_mainLayer;
 				if (layer) {
-					layer->removeFromParentAndCleanup(false);
+					if (!a->m_hasNoEffects) layer->removeFromParentAndCleanup(false);
 					a->addChild(layer);
-					player->addChild(layer); //!!!
+					if (!a->m_hasNoEffects) player->addChild(layer); //!!!
 				}
 			}
 		)->customSetup(
@@ -280,9 +280,9 @@ inline void SetupObjects() {
 				if (!player) return;
 				Ref layer = player->m_mainLayer;
 				if (layer) {
-					layer->removeFromParentAndCleanup(false);
+					if (!a->m_hasNoEffects) layer->removeFromParentAndCleanup(false);
 					a->addChild(layer);
-					player->addChild(layer); //!!!
+					if (!a->m_hasNoEffects) player->addChild(layer); //!!!
 				}
 			}
 		)->customSetup(
