@@ -933,7 +933,7 @@ class $modify(PlayerObjectExt, PlayerObject) {
 	}
 	void resetObject() {
 		PlayerObject::resetObject();
-		m_mainLayer->setVisible(1);
+		setVisible(1);
 		m_customScaleY = 1.f;
 		m_customScaleX = 1.f;
 	}
@@ -960,12 +960,18 @@ class $modify(EffectGameObjectExt, EffectGameObject) {
 	void triggerObject(GJBaseGameLayer * p0, int p1, gd::vector<int> const* p2) {
 		if (m_objectID == 1613 or m_objectID == 1612) {
 			if (m_hasNoEffects) {
+				//show fully
+				auto oldid = m_objectID;
+				m_objectID = 1613;
+				EffectGameObject::triggerObject(p0, p1, p2);
+				m_objectID = oldid;
+				//hide as node
 				for (auto p : { p0->m_player1, p0->m_player2 }) if (p) {
-					p->m_mainLayer->setVisible(m_objectID == 1613); //is show?
+					p->setVisible(m_objectID == 1613); //is show?
 				}
-				return;
+				if (m_objectID == 1612) return; //no default hide beh
 			}
-			for (auto p : { p0->m_player1, p0->m_player2 }) p->m_mainLayer->setVisible(1);
+			for (auto p : { p0->m_player1, p0->m_player2 }) p->setVisible(1);
 		}
 		EffectGameObject::triggerObject(p0, p1, p2);
 	}
