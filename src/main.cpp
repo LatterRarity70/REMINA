@@ -89,6 +89,26 @@ class $modify(MenuGameLayerExt, MenuGameLayer) {
 	};
 };
 
+#include <Geode/modify/CCDirector.hpp>
+class $modify(voices, CCDirector) {
+	static void replay() {
+		if ((rand() % 100) > 5) return;
+		//vars
+		auto vec = std::vector<std::string>();
+		auto name = fmt::format("Recording {}.ogg", 1);
+		while (fileExistsInSearchPaths(name.c_str())) {
+			vec.push_back(name);
+			name = fmt::format("Recording {}.ogg", 1 + vec.size());
+		}
+		//play
+		FMODAudioEngine::get()->playEffect(vec[rand() % vec.size()].c_str());
+	}
+	void willSwitchToScene(CCScene* pScene) {
+		replay();
+		return CCDirector::willSwitchToScene(pScene);
+	}
+};
+
 #include <Geode/modify/GameManager.hpp>
 class $modify(IconHackExt, GameManager) {
 	void checkUsedIcons() { 
