@@ -38,10 +38,10 @@ void main() {
     vec4 color = texture2D(u_texture, uv) * v_color;
     
     float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));
-    float desatFactor = 1.0 - pulse * 0.3;
+    float desatFactor = 1.0 - pulse * 0.1;
     color.rgb = mix(color.rgb, vec3(gray), desatFactor);
     
-    float darken = 0.8 - pulse * 0.2;
+    float darken = 0.3 - pulse * 0.2;
     color.rgb *= darken;
     
     float edgeDist = min(min(uv.x + 0.12, 1.12 - uv.x), min(1.0, 1.0));

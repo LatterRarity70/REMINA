@@ -35,7 +35,7 @@ $on_game(TexturesLoaded) {
 		CCDelayTime::create(0.1f), CallFuncExt::create(
 			[mirrasovers] {
 				if (rand() % 100 < 10) return;
-				mirrasovers->setOpacity(10 + (rand() % 50));
+				mirrasovers->setOpacity(110 + (rand() % 50));
 				//hide all children, then show a random one
 				for (auto child : mirrasovers->getChildrenExt()) 
 					child->setVisible(false);
@@ -92,7 +92,7 @@ class $modify(MenuGameLayerExt, MenuGameLayer) {
 #include <Geode/modify/CCDirector.hpp>
 class $modify(voices, CCDirector) {
 	static void replay() {
-		if ((rand() % 100) > 5) return;
+		if ((rand() % 100) > 35) return;
 		//vars
 		auto vec = std::vector<std::string>();
 		auto name = fmt::format("Recording {}.ogg", 1);
@@ -105,6 +105,7 @@ class $modify(voices, CCDirector) {
 	}
 	void willSwitchToScene(CCScene* pScene) {
 		replay();
+		if (auto a = OverlayManager::get()->getChildByID("mirrasovers")) a->runAction(CCFadeOut::create(0.5f));
 		return CCDirector::willSwitchToScene(pScene);
 	}
 };
@@ -184,10 +185,11 @@ class $modify(LoadingLayerExt, LoadingLayer) {
 		if (!LoadingLayer::init(refresh)) return false;
 
 		if (Ref a = typeinfo_cast<CCSprite*>(querySelector("bg-texture"))) {
-			a->setDisplayFrame(CCSprite::create("edit_barBG_001.png")->displayFrame());
+			a->setDisplayFrame(CCSprite::create("GJ_square02.png")->displayFrame());
 			a->setScaleX(this->getContentSize().width / a->getContentSize().width);
 			a->setScaleY(this->getContentSize().height / a->getContentSize().height);
 			a->setColor(ccWHITE);
+			a->getTexture()->setAliasTexParameters();
 		}
 
 		auto dialogIcon_6893 = CCFileUtils::get()->fullPathForFilename(
@@ -208,10 +210,6 @@ class $modify(LoadingLayerExt, LoadingLayer) {
 		CCFileUtils::get()->m_fullPathCache["shop3.mp3"] = walls;
 		CCFileUtils::get()->m_fullPathCache["shop4.mp3"] = walls;
 		CCFileUtils::get()->m_fullPathCache["shop5.mp3"] = walls;
-
-	    CCFileUtils::get()->m_fullPathCache["StayInsideMe.mp3"] = CCFileUtils::get()->fullPathForFilename(
-			"menuLoop/10008531..mp3", 0
-		);
 
 		return true;
 	}

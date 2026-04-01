@@ -60,23 +60,24 @@ class $modify(NodeVisitController, CCNode) {
 		auto hexcfix = [] (std::string hex) { return std::string(hex.begin() + 1, hex.begin() + 7); };
 #define repl(org, tar) if (node->getColor() == cc3bFromHexString(hexcfix(org)).unwrapOr(ccWHITE)) node->setColor(cc3bFromHexString(hexcfix(tar)).unwrapOr(ccWHITE));
 		if (auto node = typeinfo_cast<CCRGBAProtocol*>(this)) {
-			repl("#0066FFFF", "#686868FF");//background
-			repl("#334499FF", "#161218FF");//chest_glow_bg_001.png
-			repl("#00388DFF", "#272727FF");//level-search-bg
-			repl("#002762FF", "#000000FF");//level-search-bar-bg
-			repl("#002E75FF", "#000000FF");//quick-search-bg
-			repl("#00245BFF", "#000000FF");//difficulty-filters-bg
-			repl("#001F4FFF", "#121212FF");//length-filters-bg
-			repl("#824021FF", "#362424FF");//desc-background
-			repl("#203182FF", "#BDB0B0FF");//GJCommentListLayer outline
-			repl("#824020FF", "#BDB0B0FF");//GJCommentListLayer outline
-			repl("#203182FF", "#37373764");//CommentCell CCScale9Sprite
-			repl("#002E73FF", "#000000FF");//play-button1
-			repl("#0057DAFF", "#000000FF");//play-button11
-			repl("#002E73FF", "#000000FF");//play-button111
-			repl("#BF723EFF", "#171717FF");//GJListLayer
-			repl("#A1582CFF", "#1F1F1FFF");//LevelCell1
-			repl("#C2723EFF", "#231F1FFF");//LevelCell2
+			repl("#0066FFFF", "#00000011");//background
+			repl("#969696FF", "#00000011");//background GJGarageLayer
+			repl("#334499FF", "#00000000");//chest_glow_bg_001.png
+			repl("#00388DFF", "#00000000");//level-search-bg
+			repl("#002762FF", "#00000000");//level-search-bar-bg
+			repl("#002E75FF", "#00000000");//quick-search-bg
+			repl("#00245BFF", "#00000000");//difficulty-filters-bg
+			repl("#001F4FFF", "#00000000");//length-filters-bg
+			repl("#824021FF", "#00000000");//desc-background
+			repl("#203182FF", "#00000000");//GJCommentListLayer outline
+			repl("#824020FF", "#00000000");//GJCommentListLayer outline
+			repl("#203182FF", "#00000000");//CommentCell CCScale9Sprite
+			repl("#002E73FF", "#00000000");//play-button1
+			repl("#0057DAFF", "#00000000");//play-button11
+			repl("#002E73FF", "#00000000");//play-button111
+			repl("#BF723EFF", "#00000000");//GJListLayer
+			repl("#A1582CFF", "#00000000");//LevelCell1
+			repl("#C2723EFF", "#00000000");//LevelCell2
 			repl("#6C99D8FF", "#7A7A7AFF");//inputplaceholder
 		};
 		if (Ref node = typeinfo_cast<CCLabelBMFont*>(this)) {
@@ -84,9 +85,9 @@ class $modify(NodeVisitController, CCNode) {
 			repl("#78AAF0FF", "#7A7A7AFF");//inputplaceholder-LevelListLayer
 		}
 		if (Ref node = typeinfo_cast<CCLayerColor*>(this)) {
-			repl("#BF723EFF", "#171717FF");//GJListLayer
-			repl("#A1582CFF", "#1F1F1FFF");//LevelCell1
-			repl("#C2723EFF", "#231F1FFF");//LevelCell2
+			repl("#BF723EFF", "#00000000");//GJListLayer
+			repl("#A1582CFF", "#00000000");//LevelCell1
+			repl("#C2723EFF", "#00000000");//LevelCell2
 			//repl("", "");
 		};
 #undef repl

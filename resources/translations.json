@@ -1,4 +1,6 @@
 {
+  "Activate Sapphire Pro": "SORRY I THINK \nI BROKE SOMETHING",
+  "Go to Settings to activate Sapphire Pro.": "SORRY I THINK I BROKE SOMETHING",
   "Geometry Dash": "REMINA GDPS",
   "Stereo Madness": " ",
   "01: Stereo Madness": " ",
@@ -6,7 +8,7 @@
   "Load Comments": "load",
   "No comments": "nothing.",
   "Level Info": "inf",
-  "Level Stats": "stats",
+  "Level Stats": "stats\n ",
   "Options": "opts",
   "Advanced Options": "adv opts",
   "Settings": "sets",
@@ -17,8 +19,10 @@
   "Unverified": "m_isVerified = 0",
   "Verified": "m_isVerified = 1",
   "My Levels": "Your Levels",
-  "OK": "K",
-  "View": "See",
+  "OK": "onBtn1(0x######)",
+  "View": "view\n ",
+  "Get It": "get\n --------",
+  "Plat.": "ln5\n ",
   "Twitter": "Telegram",
   "Twitter:": "Telegram:",
   "twitter.com/...": "t.me/..."
