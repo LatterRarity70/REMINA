@@ -185,7 +185,7 @@ class $modify(LoadingLayerExt, LoadingLayer) {
 		if (!LoadingLayer::init(refresh)) return false;
 
 		if (Ref a = typeinfo_cast<CCSprite*>(querySelector("bg-texture"))) {
-			a->setDisplayFrame(CCSprite::create("GJ_square02.png")->displayFrame());
+			a->setDisplayFrame(CCSprite::create("PixelSheet_01.png")->displayFrame());
 			a->setScaleX(this->getContentSize().width / a->getContentSize().width);
 			a->setScaleY(this->getContentSize().height / a->getContentSize().height);
 			a->setColor(ccWHITE);
