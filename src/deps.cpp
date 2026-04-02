@@ -69,7 +69,7 @@ class $modify(NodeVisitController, CCNode) {
 			repl("#A1582CFF", "#00000000");//LevelCell1
 			repl("#C2723EFF", "#00000000");//LevelCell2
 			//repl("", "");
-		};
+		}
 		else if (auto node = typeinfo_cast<CCRGBAProtocol*>(this)) {
 			repl("#0066FFFF", "#00000011");//background
 			repl("#969696FF", "#00000011");//background GJGarageLayer
