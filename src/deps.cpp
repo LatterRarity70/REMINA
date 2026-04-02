@@ -59,7 +59,18 @@ class $modify(NodeVisitController, CCNode) {
 		if (game and game->isRunning()) return;*/
 		auto hexcfix = [] (std::string hex) { return std::string(hex.begin() + 1, hex.begin() + 7); };
 #define repl(org, tar) if (node->getColor() == cc3bFromHexString(hexcfix(org)).unwrapOr(ccWHITE)) node->setColor(cc3bFromHexString(hexcfix(tar)).unwrapOr(ccWHITE));
-		if (auto node = typeinfo_cast<CCRGBAProtocol*>(this)) {
+		
+		if (Ref node = typeinfo_cast<CCLabelBMFont*>(this)) {
+			repl("#6C99D8FF", "#7A7A7AFF");//inputplaceholder
+			repl("#78AAF0FF", "#7A7A7AFF");//inputplaceholder-LevelListLayer
+		}
+		else if (Ref node = typeinfo_cast<CCLayerColor*>(this)) {
+			repl("#BF723EFF", "#00000000");//GJListLayer
+			repl("#A1582CFF", "#00000000");//LevelCell1
+			repl("#C2723EFF", "#00000000");//LevelCell2
+			//repl("", "");
+		};
+		else if (auto node = typeinfo_cast<CCRGBAProtocol*>(this)) {
 			repl("#0066FFFF", "#00000011");//background
 			repl("#969696FF", "#00000011");//background GJGarageLayer
 			repl("#334499FF", "#00000000");//chest_glow_bg_001.png
@@ -79,16 +90,6 @@ class $modify(NodeVisitController, CCNode) {
 			repl("#A1582CFF", "#00000000");//LevelCell1
 			repl("#C2723EFF", "#00000000");//LevelCell2
 			repl("#6C99D8FF", "#7A7A7AFF");//inputplaceholder
-		};
-		if (Ref node = typeinfo_cast<CCLabelBMFont*>(this)) {
-			repl("#6C99D8FF", "#7A7A7AFF");//inputplaceholder
-			repl("#78AAF0FF", "#7A7A7AFF");//inputplaceholder-LevelListLayer
-		}
-		if (Ref node = typeinfo_cast<CCLayerColor*>(this)) {
-			repl("#BF723EFF", "#00000000");//GJListLayer
-			repl("#A1582CFF", "#00000000");//LevelCell1
-			repl("#C2723EFF", "#00000000");//LevelCell2
-			//repl("", "");
 		};
 #undef repl
 	}
