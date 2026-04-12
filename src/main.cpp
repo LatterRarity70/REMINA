@@ -10,7 +10,7 @@ $on_game(TexturesLoaded) {
 	//lr70.main-levels-editor REMOVE_UI
     listenForSettingChanges<bool>("REMOVE_UI", [](bool value) {
         Notification::create("I'm sorry, but I won't let you change that.")->show();
-	    mod("lr70.main-levels-editor")->setSettingValue<bool>("REMOVE_UI", true);
+	    if(!mod("lr70.main-levels-editor")->getSavedValue<bool>("REMOVE_UI")) mod("lr70.main-levels-editor")->setSettingValue<bool>("REMOVE_UI", true);
     }, mod("lr70.main-levels-editor"));
 	mod("lr70.main-levels-editor")->setSettingValue<bool>("REMOVE_UI", true);
 	//mirrasovers
