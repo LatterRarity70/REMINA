@@ -2,7 +2,7 @@
 
 using namespace geode::prelude;
 
-#define mod(id) Loader::get()->getInstalledMod(id) ? Loader::get()->getInstalledMod(id) : getMod()
+#define mod(id) (Loader::get()->getInstalledMod(id) ? Loader::get()->getInstalledMod(id) : getMod())
 
 $on_mod(Loaded) {
     //lr70.main-levels-editor REMOVE_UI
