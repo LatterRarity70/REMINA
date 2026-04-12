@@ -29,10 +29,6 @@
 		"alphalaneous.happy_textures": {
 			"version": ">=v2.0.7",
 			"required": false
-		},
-		"lr70.main-levels-editor": {
-			"version": ">=8.0.0-beta.29",
-			"required": false
 		}
 	},
 	"resources": {
