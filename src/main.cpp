@@ -4,8 +4,10 @@ using namespace geode::prelude;
 
 #define mod(id) (Loader::get()->getInstalledMod(id) ? Loader::get()->getInstalledMod(id) : getMod())
 
-$on_mod(Loaded) {
-    //lr70.main-levels-editor REMOVE_UI
+$on_game(TexturesLoaded) {
+    static int done;
+	if (done++) return;
+	//lr70.main-levels-editor REMOVE_UI
     listenForSettingChanges<bool>("REMOVE_UI", [](bool value) {
         Notification::create("I'm sorry, but I won't let you change that.")->show();
 	    mod("lr70.main-levels-editor")->setSettingValue<bool>("REMOVE_UI", true);
