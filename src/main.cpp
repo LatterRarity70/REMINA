@@ -2,7 +2,19 @@
 
 using namespace geode::prelude;
 
+#define mod(id) (Loader::get()->getInstalledMod(id) ? Loader::get()->getInstalledMod(id) : getMod())
+
 $on_game(TexturesLoaded) {
+    static int done;
+	if (done++) return;
+	//lr70.main-levels-editor REMOVE_UI
+	/*
+    listenForSettingChanges<bool>("REMOVE_UI", [](bool value) {
+        Notification::create("I'm sorry, but I won't let you change that.")->show();
+	    if(!mod("lr70.main-levels-editor")->getSavedValue<bool>("REMOVE_UI")) mod("lr70.main-levels-editor")->setSettingValue<bool>("REMOVE_UI", true);
+    }, mod("lr70.main-levels-editor"));
+	mod("lr70.main-levels-editor")->setSettingValue<bool>("REMOVE_UI", true);
+	*/
 	//mirrasovers
 	Ref mirrasovers = CCSprite::create();
 	mirrasovers->setAnchorPoint({ 0, 0 });

@@ -25,6 +25,7 @@
   
   "Activate Sapphire Pro": "SORRY I THINK \nI BROKE SOMETHING",
   "Go to Settings to activate Sapphire Pro.": "SORRY I THINK I BROKE SOMETHING",
+  
   "Geometry Dash": "REMINA GDPS",
   "Stereo Madness": " ",
   "01: Stereo Madness": " ",
@@ -42,7 +43,7 @@
   "Practice Mode": "m_practicePercent",
   "Unverified": "m_isVerified = 0",
   "Verified": "m_isVerified = 1",
-  "My Levels": "Your Levels",
+  "My Levels": "your levels",
   "OK": "onBtn1(0x######)",
   "View": "stare",
   "Get It": "you won't get it",
