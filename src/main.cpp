@@ -2,6 +2,15 @@
 
 using namespace geode::prelude;
 
+auto static LOADING_SONG = [] { srand(time(nullptr)); return std::vector<const char*>{
+	"""truth.mp3"
+	, "truth_pt1.mp3"
+	, "truth_pt2.mp3"
+	, "truth_pt3.mp3"
+	, "truth_pt4.mp3"
+	, "truth_pt5.mp3"
+}[rand() % 6]; };
+
 #define mod(id) (Loader::get()->getInstalledMod(id) ? Loader::get()->getInstalledMod(id) : getMod())
 
 $on_game(TexturesLoaded) {
@@ -197,7 +206,7 @@ class $modify(LoadingLayerExt, LoadingLayer) {
 		if (!LoadingLayer::init(refresh)) return false;
 
 		if (Ref a = typeinfo_cast<CCSprite*>(querySelector("bg-texture"))) {
-			a->setDisplayFrame(CCSprite::create("PixelSheet_01.png")->displayFrame());
+			a->setDisplayFrame(CCSprite::create("spritesheet.png"_spr)->displayFrame());
 			a->setScaleX(this->getContentSize().width / a->getContentSize().width);
 			a->setScaleY(this->getContentSize().height / a->getContentSize().height);
 			a->setColor(ccWHITE);
@@ -222,6 +231,11 @@ class $modify(LoadingLayerExt, LoadingLayer) {
 		CCFileUtils::get()->m_fullPathCache["shop3.mp3"] = walls;
 		CCFileUtils::get()->m_fullPathCache["shop4.mp3"] = walls;
 		CCFileUtils::get()->m_fullPathCache["shop5.mp3"] = walls;
+
+		FMODAudioEngine::get()->setBackgroundMusicVolume(GameManager::get()->m_bgVolume);
+		FMODAudioEngine::get()->setEffectsVolume(GameManager::get()->m_sfxVolume);
+
+		GameManager::get()->fadeInMusic(LOADING_SONG());
 
 		return true;
 	}

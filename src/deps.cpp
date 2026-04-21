@@ -19,6 +19,7 @@ class $modify(CCObjectCallFix, CCObject) {
 	};
 	void retain(void) {
 		if (!this) log::error("{}->{}", this, __func__);
+		else if (auto t = typeinfo_cast<CCTexture2D*>(this)) t->setAliasTexParameters();
 		return this ? CCObject::retain() : void();
 	};
 	CCObject* autorelease(void) {
@@ -71,8 +72,8 @@ class $modify(NodeVisitController, CCNode) {
 			//repl("", "");
 		}
 		else if (auto node = typeinfo_cast<CCRGBAProtocol*>(this)) {
-			repl("#0066FFFF", "#00000011");//background
-			repl("#969696FF", "#00000011");//background GJGarageLayer
+			repl("#0066FFFF", "#11111111");//background
+			repl("#969696FF", "#22111111");//background GJGarageLayer
 			repl("#334499FF", "#00000000");//chest_glow_bg_001.png
 			repl("#00388DFF", "#00000000");//level-search-bg
 			repl("#002762FF", "#00000000");//level-search-bar-bg

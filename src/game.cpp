@@ -994,7 +994,8 @@ class $modify(CustomizeObjectLayerExt, CustomizeObjectLayer) {
 			tip->setID("image-tip");
 			input->addChild(tip, 1, "image-tip"_h);
 			if (auto menu = querySelector("clear-text-menu")) {
-				auto item = CCMenuItemExt::createSpriteExtraWithFrameName(
+				//explorer
+				auto explorer = CCMenuItemExt::createSpriteExtraWithFrameName(
 					"gj_findBtn_001.png", 0.75, [input](void*) {
 						auto pop = MDPopup::create("", "", "");
 						pop->m_mainLayer->setContentHeight(262.000f);
@@ -1039,8 +1040,17 @@ class $modify(CustomizeObjectLayerExt, CustomizeObjectLayer) {
 						pop->m_mainLayer->addChild(bar);
 					}
 				);
-				item->setID("explorer");
-				menu->addChild(item);
+				explorer->setID("explorer");
+				menu->addChild(explorer);
+				//upload
+				auto upload = CCMenuItemExt::createSpriteExtraWithFrameName(
+					"GJ_plus3Btn_001.png", 1.0, [](void*) {
+						CCApplication::get()->openURL("https://imgbox.com");
+					}
+				);
+				upload->setID("upload");
+				upload->setPositionX(30.000f);
+				menu->addChild(upload);
 			}
 		}
 		return true;
